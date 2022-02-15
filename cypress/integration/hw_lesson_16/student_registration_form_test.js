@@ -1,21 +1,4 @@
-import faker from "faker";
-
-let firstName = faker.name.firstName();
-let lastName = faker.name.lastName();
-let userEmail = faker.internet.email();
-// let randomGender = ['#gender-radio-1', '#gender-radio-2', '#gender-radio-3'];
-// let randomGenderOfArray = randomGender[Math.floor(Math.random()*randomGender.length)];
-// let gender = randomGenderOfArray;
-let userNumber = faker.phone.phoneNumber('##########');
-
-let randomYearSelect = faker.datatype.number({ min: 1900, max: 2100 });
-let yearSelect = randomYearSelect.toString();
-
-let randomMonthSelect = faker.datatype.number({ min: 0, max: 11 });
-let monthSelect = randomMonthSelect.toString();
-
-let randomDaySelect = faker.datatype.number({ min: 1, max: 28 });
-let daySelect = randomDaySelect.toString()
+import userData, { stateAndSity } from '../../lesson_16/mock_data.js'
 
 describe('HW Lesson 16', () => {
     it('Navigation', () => {
@@ -28,32 +11,32 @@ describe('HW Lesson 16', () => {
     it('Filling in the registration form', () => {
 
         cy.get('#firstName')
-            .type(firstName)
-            .should('have.value', firstName);
+            .type(userData.firstName)
+            .should('have.value', userData.firstName);
 
         cy.get('#lastName')
-            .type(lastName)
-            .should('have.value', lastName);
+            .type(userData.lastName)
+            .should('have.value', userData.lastName);
 
 
         cy.get('#userEmail')
-            .type(userEmail)
-            .should('have.value', userEmail);
+            .type(userData.userEmail)
+            .should('have.value', userData.userEmail);
 
         cy.get('[type="radio"].custom-control-input').first().check({ force: true })
 
         cy.get('#userNumber')
-            .type(userNumber)
-            .should('have.value', userNumber);
+            .type(userData.userNumber)
+            .should('have.value', userData.userNumber);
 
         cy.get('#dateOfBirthInput').click()
         cy.get('.react-datepicker__year-select')
-            .select(yearSelect).should('have.value', yearSelect)
+            .select(userData.yearSelect).should('have.value', userData.yearSelect)
 
         cy.get('.react-datepicker__month-select')
-            .select(monthSelect).should('have.value', monthSelect)
+            .select(userData.monthSelect).should('have.value', userData.monthSelect)
 
-        cy.get('.react-datepicker__week').contains(daySelect).click()
+        cy.get('.react-datepicker__week').contains(userData.daySelect).click()
 
     });
 
@@ -72,21 +55,22 @@ describe('HW Lesson 16', () => {
     it('Add curent adress', () => {
         cy.get('#stateCity-wrapper').type('NCR{enter}')
         cy.get('#city').type('Noida{enter}')
+        // cy.get('#stateCity-wrapper').click().then(Element=>Element.get('#react-select-3-option-0').click())
+        // cy.get('#city').select(stateAndSity['#react-select-3-option-0'].cities['#react-select-4-option-0'])
     })
 
     it('submit', () => {
 
         cy.get('#submit').click();
 
-        cy.get('table').contains('td', firstName).should('be.visible');
-        cy.get('table').contains('td', lastName).should('be.visible');
-        cy.get('table').contains('td', userEmail).should('be.visible');
+        cy.get('table').contains('td', userData.firstName).should('be.visible');
+        cy.get('table').contains('td', userData.lastName).should('be.visible');
+        cy.get('table').contains('td', userData.userEmail).should('be.visible');
         cy.get('table').contains('td', 'Male').should('be.visible');
-        cy.get('table').contains('td', userNumber).should('be.visible');
-        cy.get('table').contains('td', daySelect, monthSelect, yearSelect).should('be.visible');
+        cy.get('table').contains('td', userData.userNumber).should('be.visible');
+        cy.get('table').contains('td', userData.daySelect, userData.monthSelect, userData.yearSelect).should('be.visible');
         cy.get('table').contains('td', 'Sports').should('be.visible');
-        cy.get('table').contains('td', 'NCR', 'Noida');
-
+        cy.get('table').contains('td',  'NCR', 'Noida');
 
     })
 
