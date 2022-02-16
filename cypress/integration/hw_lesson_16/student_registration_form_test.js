@@ -1,5 +1,5 @@
 import { inputValue } from '../../lesson_16/methods.js';
-import {userData, states, stateCities, randomState, randomCity} from '../../lesson_16/mock_data.js'
+import {userData, states, stateCities, randomState, randomCity, randomGender} from '../../lesson_16/mock_data.js'
 
 describe('HW Lesson 16', () => {
     it('Navigation', () => {
@@ -17,7 +17,7 @@ describe('HW Lesson 16', () => {
 
         inputValue(userData[2]);
 
-        cy.get('[type="radio"].custom-control-input').first().check({ force: true })
+        cy.get(`[value=${randomGender}]`).check({ force: true })
 
         inputValue(userData[3]);
 
@@ -83,7 +83,7 @@ describe('HW Lesson 16', () => {
         cy.get('table').contains('td', userData[0].value).should('be.visible');
         cy.get('table').contains('td', userData[1].value).should('be.visible');
         cy.get('table').contains('td', userData[2].value).should('be.visible');
-        cy.get('table').contains('td', 'Male').should('be.visible');
+        cy.get('table').contains('td', randomGender).should('be.visible');
         cy.get('table').contains('td', userData[3].value).should('be.visible');
         cy.get('table').contains('td', userData[4].value, userData[5].value, userData[6].value).should('be.visible');
         cy.get('table').contains('td', 'Sports').should('be.visible');

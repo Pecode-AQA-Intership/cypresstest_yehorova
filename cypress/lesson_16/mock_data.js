@@ -9,9 +9,9 @@ export const userData = [
 {selector :'#monthSelect', value: faker.datatype.number({ min: 0, max: 11 }).toString()},
 {selector :'#daySelect', value: faker.datatype.number({ min: 1, max: 28 }).toString()}
 ]
-// let randomGender = ['#gender-radio-1', '#gender-radio-2', '#gender-radio-3'];
-// let randomGenderOfArray = randomGender[Math.floor(Math.random()*randomGender.length)];
-// let gender = randomGenderOfArray;
+ let genders = ['Male', 'Female', 'Other'];
+export let randomGender = genders[Math.floor(Math.random()*genders.length)];
+
 
 
 export const states = ['NCR', 'Uttar Pradesh', 'Haryana', 'Rajasthan']
