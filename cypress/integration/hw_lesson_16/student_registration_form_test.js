@@ -1,4 +1,5 @@
-import userData, { stateAndSity } from '../../lesson_16/mock_data.js'
+import { inputValue } from '../../lesson_16/methods.js';
+import {userData, states, stateCities, randomState, randomCity} from '../../lesson_16/mock_data.js'
 
 describe('HW Lesson 16', () => {
     it('Navigation', () => {
@@ -10,34 +11,24 @@ describe('HW Lesson 16', () => {
     });
     it('Filling in the registration form', () => {
 
-        cy.get('#firstName')
-            .type(userData.firstName)
-            .should('have.value', userData.firstName);
+        inputValue(userData[0]);
 
-        cy.get('#lastName')
-            .type(userData.lastName)
-            .should('have.value', userData.lastName);
+        inputValue(userData[1]);
 
-
-        cy.get('#userEmail')
-            .type(userData.userEmail)
-            .should('have.value', userData.userEmail);
+        inputValue(userData[2]);
 
         cy.get('[type="radio"].custom-control-input').first().check({ force: true })
 
-        cy.get('#userNumber')
-            .type(userData.userNumber)
-            .should('have.value', userData.userNumber);
+        inputValue(userData[3]);
 
         cy.get('#dateOfBirthInput').click()
         cy.get('.react-datepicker__year-select')
-            .select(userData.yearSelect).should('have.value', userData.yearSelect)
+            .select(userData[4].value).should('have.value', userData[4].value)
 
         cy.get('.react-datepicker__month-select')
-            .select(userData.monthSelect).should('have.value', userData.monthSelect)
+            .select(userData[5].value).should('have.value', userData[5].value)
 
-        cy.get('.react-datepicker__week').contains(userData.daySelect).click()
-
+        cy.get('.react-datepicker__week').contains(userData[6].value).click()
     });
 
     it('File Upload using cypress-file-upload npm package', () => {
@@ -49,28 +40,54 @@ describe('HW Lesson 16', () => {
 
         cy.get('[type="checkbox"]').check({ force: true })
             .should('be.checked')
-
     })
 
-    it('Add curent adress', () => {
-        cy.get('#stateCity-wrapper').type('NCR{enter}')
-        cy.get('#city').type('Noida{enter}')
-        // cy.get('#stateCity-wrapper').click().then(Element=>Element.get('#react-select-3-option-0').click())
-        // cy.get('#city').select(stateAndSity['#react-select-3-option-0'].cities['#react-select-4-option-0'])
+    it('check states dropdowns', () => {
+        cy.get('#state').click();
+        cy.get('[tabindex="-1"]').then(dropdownListOptions => { 
+            const actual = [...dropdownListOptions].map(htmlElement => htmlElement.innerText) 
+            expect(actual).to.deep.eq(states) 
+        })
     })
+
+    it('check cities dropdowns', () => {
+        states.forEach(state => { 
+            cy.get('#state #react-select-3-input').type(`${state}{enter}`); 
+            cy.get('#city').click();  
+            cy.get('[tabindex="-1"]').then(dropdownListOptions => { 
+                const actual = [...dropdownListOptions].map(o => o.innerText) 
+                expect(actual).to.deep.eq(stateCities[state]) 
+            })
+        })
+    })
+
+    it('select address', () => {
+        cy.get('#state #react-select-3-input').type(`${randomState}{enter}`);
+        cy.get('#city').type(`${randomCity}{enter}`);
+    })
+
+
+    it('check required inputs filled', () => {
+        cy.get('[required]').then($requiredInputs => {  
+            cy.wrap($requiredInputs).each($input => { 
+                expect($input).not.eq('')
+            })
+        })
+    })
+
 
     it('submit', () => {
 
         cy.get('#submit').click();
 
-        cy.get('table').contains('td', userData.firstName).should('be.visible');
-        cy.get('table').contains('td', userData.lastName).should('be.visible');
-        cy.get('table').contains('td', userData.userEmail).should('be.visible');
+        cy.get('table').contains('td', userData[0].value).should('be.visible');
+        cy.get('table').contains('td', userData[1].value).should('be.visible');
+        cy.get('table').contains('td', userData[2].value).should('be.visible');
         cy.get('table').contains('td', 'Male').should('be.visible');
-        cy.get('table').contains('td', userData.userNumber).should('be.visible');
-        cy.get('table').contains('td', userData.daySelect, userData.monthSelect, userData.yearSelect).should('be.visible');
+        cy.get('table').contains('td', userData[3].value).should('be.visible');
+        cy.get('table').contains('td', userData[4].value, userData[5].value, userData[6].value).should('be.visible');
         cy.get('table').contains('td', 'Sports').should('be.visible');
-        cy.get('table').contains('td',  'NCR', 'Noida');
+        cy.get('table').contains('td',  randomState, randomCity);
 
     })
 
