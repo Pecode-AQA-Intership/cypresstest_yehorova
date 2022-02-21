@@ -3,9 +3,7 @@ import {userData, states, stateCities, randomState, randomCity, randomGender} fr
 
 describe('HW Lesson 16', () => {
     it('Navigation', () => {
-        cy.visit('https://demoqa.com/automation-practice-form')
-
-        // Should be on a new URL which includes '/automation-practice-forms'
+        cy.visit('/automation-practice-form')
         cy.url().should('include', '/automation-practice-form')
 
     });
@@ -66,7 +64,6 @@ describe('HW Lesson 16', () => {
         cy.get('#city').type(`${randomCity}{enter}`);
     })
 
-
     it('check required inputs filled', () => {
         cy.get('[required]').then($requiredInputs => {  
             cy.wrap($requiredInputs).each($input => { 
@@ -74,7 +71,6 @@ describe('HW Lesson 16', () => {
             })
         })
     })
-
 
     it('submit', () => {
 
@@ -88,10 +84,5 @@ describe('HW Lesson 16', () => {
         cy.get('table').contains('td', userData[4].value, userData[5].value, userData[6].value).should('be.visible');
         cy.get('table').contains('td', 'Sports').should('be.visible');
         cy.get('table').contains('td',  randomState, randomCity);
-
     })
-
 })
-
-
-
